@@ -19,4 +19,3 @@ export default async function handler(req: any, res: any) {
     return json(res, 500, { error: e?.message ?? 'Server error' })
   }
 }
-
