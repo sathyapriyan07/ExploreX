@@ -9,10 +9,6 @@ export default defineConfig({
       '@': new URL('./src', import.meta.url).pathname,
     },
   },
-  build: {
-    outDir: '../dist',
-    emptyOutDir: true,
-  },
   server: {
     port: 5173,
   },
