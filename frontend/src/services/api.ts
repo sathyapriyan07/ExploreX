@@ -1,6 +1,14 @@
 import type { ImageResult, NearbyPoi, WeatherBundle, WikiSummary } from '../types'
 
-const API_BASE = (import.meta.env.VITE_API_BASE as string | undefined) ?? 'http://localhost:8787'
+function getApiBase() {
+  const raw = (import.meta.env.VITE_API_BASE as string | undefined) ?? ''
+  if (!raw) return typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5173'
+  if (raw.startsWith('http://') || raw.startsWith('https://')) return raw
+  const origin = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5173'
+  return origin + (raw.startsWith('/') ? raw : `/${raw}`)
+}
+
+const API_BASE = getApiBase()
 
 async function getJson<T>(path: string, params?: Record<string, string | number | undefined | null>): Promise<T> {
   const url = new URL(path, API_BASE)
@@ -44,4 +52,3 @@ export const api = {
     }>('/api/place-full', { place })
   },
 }
-

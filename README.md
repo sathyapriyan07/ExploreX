@@ -7,6 +7,7 @@
 
 2) Configure env:
    - Copy `.env.example` to `.env`
+   - Leave `VITE_API_BASE` empty for same-origin `/api/*` (Vercel serverless functions)
    - (Optional) Fill `UNSPLASH_ACCESS_KEY` (not currently used by the UI; kept for future gallery upgrades)
    - Optional (recommended): fill `VITE_MAPTILER_KEY` for MapTiler tiles (falls back to OSM if unset)
    - Optional: set `VITE_MAPTILER_STYLE_SATELLITE=hybrid-v4` for satellite/hybrid tiles
@@ -16,7 +17,7 @@
    - `npm run dev`
 
 Frontend: `http://localhost:5173`  
-Backend proxy API: `http://localhost:8787/api/*`
+Backend proxy API: `http://localhost:5173/api/*` (Vercel serverless functions)
 
 ## Proxy endpoints
 
@@ -27,7 +28,16 @@ Backend proxy API: `http://localhost:8787/api/*`
 - `GET /api/images?query=...` (Unsplash images)
 - `GET /api/place-full?place=...` (combined payload; cached)
 
-All external calls go through the backend (keys stay server-side). Responses are cached in-memory with a 1–6 hour TTL and rate-limited per IP.
+All external calls go through `/api/*` (Vercel serverless). Responses are cached in-memory (best-effort on warm instances) and rate-limited per IP.
+
+## Deploy on Vercel (single deploy)
+
+1) Create a Vercel project from this repo.
+2) Keep defaults (repo root). `vercel.json` sets build/output + SPA rewrites.
+3) Add env vars (Vercel Project → Settings → Environment Variables):
+   - `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` (optional)
+   - `VITE_MAPTILER_KEY` (optional)
+4) Deploy. The app uses same-origin serverless routes: `/api/wiki`, `/api/nearby`, etc.
 
 ## Supabase (optional, recommended)
 
