@@ -1,0 +1,17 @@
+node_modules
+dist
+.env
+.env.*.local
+.DS_Store
+
+# Vite
+frontend/dist
+frontend/node_modules
+
+# Backend
+backend/dist
+backend/node_modules
+
+# Supabase
+supabase/.temp
+
